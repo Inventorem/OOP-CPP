@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.13)
+project(task_1)
+set(CMAKE_CXX_STANDARD 14)
+set(PROJECT_NAME BigIntTask)
+add_subdirectory(Bigint)
+add_subdirectory(test)
