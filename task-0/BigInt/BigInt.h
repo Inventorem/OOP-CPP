@@ -1,79 +1,97 @@
-#ifndef OOP_BIGINT_H
-#define OOP_BIGINT_H
+#pragma once
+
+#include <string>
 #include <iostream>
-#include <vector>
-class BigInt;
-typedef BigInt bd;
-typedef BigInt bigint;
+#include <climits>
+#include <cmath>
+#include <algorithm>
+
 class BigInt {
 public:
-    BigInt(){}
-    BigInt(int value){
 
-    }
-    BigInt(std::string value){
+    unsigned long long length;
+    std::string value;
+    bool sign;
 
-    } // бросать исключение std::invalid_argument при ошибке
+    BigInt();
 
-    // copying contructor
-   /* 1. аргумент функции по значению, возвращение
-    2. Декларирование и инициализация в одной строчке
-    3. операторы и прочее
-    Компилятор создает дефолтный копир.конструктор*/
-    BigInt(const BigInt&);
+    explicit BigInt(int);
 
-    /*Простой человеческий деструктор, стоит попробовать с динамической памятью*/
+    explicit BigInt(std::string);
+
+    BigInt(const BigInt &);
+
     ~BigInt();
 
-    BigInt& operator=(const BigInt&) {//возможно присваивание самому себе!
-    }
+    BigInt &operator=(const BigInt &);
+
     BigInt operator~() const;
 
-    BigInt& operator++();
-    const BigInt operator++(int) const;
-    BigInt& operator--();
-    const BigInt operator--(int) const;
+    BigInt &operator++();
 
-    BigInt& operator+=(const BigInt&);
-    BigInt& operator*=(const BigInt&);
-    BigInt& operator-=(const BigInt&);
-    BigInt& operator/=(const BigInt&);
-    BigInt& operator^=(const BigInt&);
-    BigInt& operator%=(const BigInt&);
-    BigInt& operator&=(const BigInt&);
-    BigInt& operator|=(const BigInt&);
+    const BigInt operator++(int);
+
+    BigInt &operator--();
+
+    const BigInt operator--(int);
+
+    BigInt &operator+=(const BigInt &);
+
+    BigInt &operator*=(const BigInt &);
+
+    BigInt &operator-=(const BigInt &);
+
+    BigInt &operator/=(const BigInt &);
+
+    BigInt &operator^=(const BigInt &);
+
+    BigInt &operator%=(const BigInt &);
+
+    BigInt &operator&=(const BigInt &);
+
+    BigInt &operator|=(const BigInt &);
 
     BigInt operator+() const;  // unary +
     BigInt operator-() const;  // unary -
 
-    bool operator==(const BigInt&) const;
-    bool operator!=(const BigInt&) const;
-    bool operator<(const BigInt&) const;
-    bool operator>(const BigInt&) const;
-    bool operator<=(const BigInt&) const;
-    bool operator>=(const BigInt&) const;
+    bool operator==(const BigInt &) const;
 
-    operator int() const;
-    operator std::string() const;
+    bool operator!=(const BigInt &) const;
 
-    size_t size() const;  // size in bytes
+    bool operator<(const BigInt &) const;
 
+    bool operator>(const BigInt &) const;
+
+    bool operator<=(const BigInt &) const;
+
+    bool operator>=(const BigInt &) const;
+
+    explicit operator int() const;
+
+    explicit operator std::string() const;
+
+    size_t size() const;
+
+    static bool isNegative(BigInt &number);
 private:
-    char sign;
-    std::vector<int> value();
+    static bool isNumber(std::string const &str);
 };
 
-BigInt operator+(const BigInt&, const BigInt&);
-BigInt operator-(const BigInt&, const BigInt&);
-BigInt operator*(const BigInt&, const BigInt&);
-BigInt operator/(const BigInt&, const BigInt&);
-BigInt operator^(const BigInt&, const BigInt&);
-BigInt operator%(const BigInt&, const BigInt&);
-BigInt operator&(const BigInt&, const BigInt&);
-BigInt operator|(const BigInt&, const BigInt&);
+BigInt operator+(const BigInt &, const BigInt &);
+
+BigInt operator-(const BigInt &, const BigInt &);
+
+BigInt operator*(const BigInt &, const BigInt &);
+
+BigInt operator/(const BigInt &, const BigInt &);
+
+BigInt operator^(const BigInt &, const BigInt &);
+
+BigInt operator%(const BigInt &, const BigInt &);
+
+BigInt operator&(const BigInt &, const BigInt &);
+
+BigInt operator|(const BigInt &, const BigInt &);
 
 
-std::ostream& operator<<(std::ostream& o, const BigInt& i);
-
-
-#endif //OOP_BIGINT_H
+std::ostream &operator<<(std::ostream &output_stream, const BigInt &number);
