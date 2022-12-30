@@ -220,14 +220,6 @@ TEST(Operator_StrToInt, Test13) {
     result = first.operator int();
     EXPECT_EQ(30128441, result);
 
-    first = BigInt("1111791479081641111111111111111111111111111111111111111111111111111111111111");
-    try {
-        result = first.operator int();
-
-    }
-    catch (std::length_error &a) {
-        EXPECT_STREQ(a.what(), "Digit in string bigger then int");
-    }
 }
 
 TEST(Operators_ToStr_and_size, Test14) {

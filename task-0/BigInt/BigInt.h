@@ -72,8 +72,8 @@ public:
 
     size_t size() const;
 
-    static bool isNegative(BigInt &number);
 private:
+    static bool isNegative(BigInt &number);
     static bool isNumber(std::string const &str);
 };
 
