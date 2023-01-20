@@ -3,7 +3,7 @@ project(OOP_Lab3)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(OOP_Lab3
+add_executable(sound_processor
         channel/WAVChannel.cpp
         data/WAVMetaData.cpp
         data/chucks/FMTChunk.cpp
