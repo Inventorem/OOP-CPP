@@ -9,7 +9,7 @@
 
 `mix $n start 		//смешать исходный поток с указанным, начиная со start`
 
-`clip start end		//Обрезать аудио до отрезка`
+`clip start end		//Обрезать аудио в отрезок`
 ## **Формат ввода:**
 
 `\> sound\_processor [-h] [-c config.txt output.wav input1.wav [input2.wav …]]`
