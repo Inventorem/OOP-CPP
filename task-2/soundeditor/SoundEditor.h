@@ -4,8 +4,6 @@
 #include "../ConfigParser.h"
 
 class SoundEditor {
-protected:
-    WAVChannel* channel;
 public:
     virtual void apply(std::string command, ConfigParser *parser) noexcept(false) = 0;;
 
@@ -15,6 +13,7 @@ public:
 
     ~SoundEditor();
 
+    WAVChannel* channel;
 };
 
 class SoundEditorMix : public SoundEditor {
@@ -36,4 +35,12 @@ class SoundEditorMute : public SoundEditor {
 
 public:
     explicit SoundEditorMute(std::ifstream &file);
+};
+
+class SoundCarry : public SoundEditor {
+    void apply(std::string command, ConfigParser * parser) override;
+public:
+    explicit SoundCarry(std::ifstream &file);
+
+    SoundCarry(std::ifstream ifstream);
 };

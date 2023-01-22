@@ -16,6 +16,8 @@ SoundEditorMute::SoundEditorMute(std::ifstream &file) : SoundEditor(file) {
 SoundEditorClip::SoundEditorClip(std::ifstream &file) : SoundEditor(file) {
 }
 
+SoundCarry::SoundCarry(std::ifstream ifstream) : SoundEditor(ifstream){
+}
 
 void SoundEditorMute::apply(std::string command, ConfigParser * parser) {
     if (channel == nullptr)
@@ -85,3 +87,9 @@ SoundEditor::~SoundEditor() {
 
 void SoundEditor::apply(const std::string command, ConfigParser *parser) noexcept(false) {
 }
+
+void SoundCarry::apply(const std::string command, ConfigParser *parser) noexcept(false) {
+    throw std::exception();
+}
+
+

@@ -42,16 +42,21 @@ int main(int argc, char** argv) {
     try {
         ConfigParser parser(config, output, inputs);
         SoundEdtiorFactory factory;
+        SoundCarry * active = new SoundCarry(parser.getInput());
         std::string command;
         while(!parser.parse_command(&command)) {
             SoundEditor * editor = factory.create(command,parser.getInput());
             editor->apply(command,&parser);
-            std::ofstream outputFile(output, std::ios::binary);
-            std::ofstream  & s = outputFile;
-            if (!outputFile.is_open())
-                throw std::exception();
-            editor->write(s);
+            active->channel = editor->channel;
         }
+        std::ofstream outFile(output, std::ios::binary);
+        if (!outFile.is_open())
+            throw std::exception();
+        active->write(outFile);
+        for(std::ifstream*& file : parser.files) {
+            delete file;
+        }
+        delete active;
     } catch (WAVException& e) {
         std::cerr << e.what();
         return e.getReturnCode();

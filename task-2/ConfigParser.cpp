@@ -41,7 +41,6 @@ ConfigParser::~ConfigParser() {
 
 std::ifstream ConfigParser::getInput() {
     std::ifstream inputFile(this->inputFiles[0], std::ios::binary);
-    std::cout<<inputFiles[0];
     return inputFile;
 }
 
