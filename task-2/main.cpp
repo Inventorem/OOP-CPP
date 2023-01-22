@@ -1,7 +1,9 @@
 #include "ConfigParser.h"
+#include "soundeditor/SoundEditorFactory.h"
 #include "WAVexcepiont.h"
 #include <cstring>
 #include <iostream>
+#include <sstream>
 
 int main(int argc, char** argv) {
     std::string config;
@@ -39,7 +41,17 @@ int main(int argc, char** argv) {
     }
     try {
         ConfigParser parser(config, output, inputs);
-        parser.apply();
+        SoundEdtiorFactory factory;
+        std::string command;
+        while(!parser.parse_command(&command)) {
+            SoundEditor * editor = factory.create(command,parser.getInput());
+            editor->apply(command,&parser);
+            std::ofstream outputFile(output, std::ios::binary);
+            std::ofstream  & s = outputFile;
+            if (!outputFile.is_open())
+                throw std::exception();
+            editor->write(s);
+        }
     } catch (WAVException& e) {
         std::cerr << e.what();
         return e.getReturnCode();

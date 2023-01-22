@@ -1,7 +1,8 @@
 #include <sstream>
+#include <iostream>
 #include "ConfigParser.h"
 
-ConfigParser::ConfigParser(std::string configFileName, std::string outputFile, std::vector<std::string> inputFiles) :
+ConfigParser::ConfigParser(const std::string& configFileName, std::string outputFile, std::vector<std::string> inputFiles) :
         config(configFileName) , inputFiles(inputFiles), outputFile(outputFile) {
     if (!this->config.is_open())
         throw std::exception();
@@ -9,70 +10,42 @@ ConfigParser::ConfigParser(std::string configFileName, std::string outputFile, s
         throw std::exception();
 }
 
-void ConfigParser::apply() {
-    std::ifstream inputFile(inputFiles[0], std::ios::binary);
-    std::vector<std::ifstream*> files;
-    if (!inputFile.is_open())
-        throw std::exception();
-    editor = new SoundEditor(inputFile);
+int ConfigParser::parse_command(std::string * command) {
     std::string string;
-    while(std::getline(config, string)) {
-        if (string[0] == '#')
-            continue;
-        std::stringstream ss(string);
-        std::string param;
-        ss >> param;
-        if(param == "mute") {
-            std::string startS;
-            std::string stopS;
-            ss >> startS >> stopS;
-            int start = std::stoi(startS);
-            int stop = std::stoi(stopS);
-            editor->mute(start, stop);
-            continue;
-        }
-        if(param == "mix") {
-            std::string channelS;
-            std::string startS;
-            ss >> channelS >> startS;
-            if (channelS[0] != '$') {
-                throw std::exception();
+    if(!std::getline(config, string))
+        return 1;
+    int flag = 0;
+    if (string[0] == '#'){
+        flag = 1;
+        while ( std::getline(config, string)){
+            if (string[0] != '#'){
+                flag = 0;
+                break;
             }
-            channelS.erase(0, 1);
-            int channelNumber = std::stoi(channelS) - 1;
-            int start = std::stoi(startS);
-            if (channelNumber >= inputFiles.size())
-                throw std::exception();
-            std::ifstream* file = new std::ifstream(inputFiles[channelNumber], std::ios::binary);
-            files.push_back(file);
-            editor->mix(*file, start);
-            continue;
+
         }
-        if(param == "clip") {
-            std::string startS;
-            std::string stopS;
-            ss >> startS >> stopS;
-            int start = std::stoi(startS);
-            int stop = std::stoi(stopS);
-            editor->clip(start, stop);
-            continue;
-        }
-        throw std::exception();
     }
-    std::ofstream output(outputFile, std::ios::binary);
-    if (!output.is_open())
-        throw std::exception();
-    editor->write(output);
-    for(std::ifstream*& file : files) {
+    if (flag){
+        return 1;
+    }
+    *command = string;
+    return 0;
+}
+
+ConfigParser::~ConfigParser() {
+    for(std::ifstream*& file : this->files) {
         delete file;
     }
+}
+
+
+std::ifstream ConfigParser::getInput() {
+    std::ifstream inputFile(this->inputFiles[0], std::ios::binary);
+    std::cout<<inputFiles[0];
+    return inputFile;
 }
 
 std::string ConfigParser::getConfigLore() {
     return "Some config format lore";
 }
 
-ConfigParser::~ConfigParser() {
-    if (editor != nullptr)
-        delete editor;
-}

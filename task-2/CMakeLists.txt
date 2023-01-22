@@ -3,7 +3,7 @@ project(OOP_Lab3)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(sound_processor
+add_executable(wav_app
         channel/WAVChannel.cpp
         data/WAVMetaData.cpp
         data/chucks/FMTChunk.cpp
@@ -13,5 +13,8 @@ add_executable(sound_processor
         channel/editor/WAVClip.cpp
         channel/editor/WAVMute.cpp
         channel/editor/WAVMixer.cpp
-        SoundEditor.cpp
-        main.cpp ConfigParser.cpp WAVexcepiont.cpp)
+        soundeditor/SoundEditor.cpp
+        main.cpp
+        ConfigParser.cpp
+        WAVexcepiont.cpp
+        soundeditor/SoundEditorFactory.cpp)

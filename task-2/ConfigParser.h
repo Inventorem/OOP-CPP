@@ -1,22 +1,23 @@
 #pragma once
 #include <fstream>
 #include <vector>
-#include "SoundEditor.h"
 
 class ConfigParser {
-    std::ifstream config;
-    std::vector<std::string> inputFiles;
-    std::string outputFile;
-    SoundEditor* editor = nullptr;
 
 public:
+    std::ifstream config;
 
-    ConfigParser(std::string configFileName, std::string outputFile, std::vector<std::string> inputFiles);
+    ConfigParser(const std::string& configFileName, std::string outputFile, std::vector<std::string> inputFiles);
 
-    void apply();
+    int parse_command(std::string * command);
 
     static std::string getConfigLore();
 
     ~ConfigParser();
 
+    std::ifstream getInput();
+
+    std::vector<std::string> inputFiles;
+    std::vector<std::ifstream*> files;
+    std::string outputFile;
 };

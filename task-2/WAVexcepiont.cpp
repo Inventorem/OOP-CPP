@@ -21,3 +21,4 @@ int WAVFileSizeException::getReturnCode() {
 int WAVInvalidFormatException::getReturnCode() {
     return 6;
 }
+
