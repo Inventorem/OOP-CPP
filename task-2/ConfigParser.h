@@ -2,22 +2,19 @@
 #include <fstream>
 #include <vector>
 
+struct SoundAction {
+    std::string name;
+    std::vector<std::string> params;
+    std::vector<std::string> files;
+};
+
 class ConfigParser {
-
+    std::vector<std::string> inputs;
+    std::ifstream& config;
 public:
-    std::ifstream config;
+    ConfigParser(std::ifstream& config, std::vector<std::string>& inputs);
 
-    ConfigParser(const std::string& configFileName, std::string outputFile, std::vector<std::string> inputFiles);
+    SoundAction nextAction(void);
 
-    int parse_command(std::string * command);
-
-    static std::string getConfigLore();
-
-    ~ConfigParser();
-
-    std::ifstream getInput();
-
-    std::vector<std::string> inputFiles;
-    std::vector<std::ifstream*> files;
-    std::string outputFile;
+    static std::string getConfigFormat(void);
 };

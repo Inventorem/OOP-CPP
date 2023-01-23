@@ -1,50 +1,40 @@
-#include <sstream>
-#include <iostream>
 #include "ConfigParser.h"
+#include <sstream>
 
-ConfigParser::ConfigParser(const std::string& configFileName, std::string outputFile, std::vector<std::string> inputFiles) :
-        config(configFileName) , inputFiles(inputFiles), outputFile(outputFile) {
-    if (!this->config.is_open())
-        throw std::exception();
-    if (inputFiles.empty())
-        throw std::exception();
+ConfigParser::ConfigParser(std::ifstream& config, std::vector<std::string>& inputs) : inputs(inputs), config(config) {}
+
+std::string ConfigParser::getConfigFormat() {
+    return "Config can contain comment (line start from #)\nSound Action format:\ncommand <params>...\n";
 }
 
-int ConfigParser::parse_command(std::string * command) {
+SoundAction ConfigParser::nextAction() {
+    std::vector<std::string> params;
+    std::vector<std::string> files;
+    std::string name = "end";
     std::string string;
-    if(!std::getline(config, string))
-        return 1;
-    int flag = 0;
-    if (string[0] == '#'){
-        flag = 1;
-        while ( std::getline(config, string)){
-            if (string[0] != '#'){
-                flag = 0;
-                break;
+    while(std::getline(config, string)) {
+        if (string[0] == '#')
+            continue;
+        std::stringstream ss(string);
+        ss >> name;
+        std::string param;
+        while(!ss.eof()) {
+            ss >> param;
+            if (param[0] == '$') {
+                try {
+                    std::string  channelStr = param;
+                    channelStr.erase(0, 1);
+                    int channel = std::stoi(channelStr);
+                    if (inputs.size() >= channel) {
+                        files.push_back(inputs[channel - 1]);
+                        continue;
+                    }
+                } catch (...) {}
             }
-
+            params.push_back(param);
         }
+        break;
     }
-    if (flag){
-        return 1;
-    }
-    *command = string;
-    return 0;
-}
-
-ConfigParser::~ConfigParser() {
-    for(std::ifstream*& file : this->files) {
-        delete file;
-    }
-}
-
-
-std::ifstream ConfigParser::getInput() {
-    std::ifstream inputFile(this->inputFiles[0], std::ios::binary);
-    return inputFile;
-}
-
-std::string ConfigParser::getConfigLore() {
-    return "Some config format lore";
+    return (SoundAction) {name, params, files};
 }
 

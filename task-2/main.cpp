@@ -1,9 +1,9 @@
-#include "ConfigParser.h"
-#include "soundeditor/SoundEditorFactory.h"
 #include "WAVexcepiont.h"
+#include "ConfigParser.h"
+#include "EditorFactory.h"
 #include <cstring>
 #include <iostream>
-#include <sstream>
+#include <vector>
 
 int main(int argc, char** argv) {
     std::string config;
@@ -13,9 +13,10 @@ int main(int argc, char** argv) {
     std::vector<std::string> inputs;
     for(int i = 1; i < argc; i++) {
         if(strcmp(argv[i], "-h") == 0) {
-            std::cout << "Help" << std::endl
-            << "sound_processor [-h] [-c config.txt output.wav input1.wav [input2.wav …]]" << std::endl
-            << ConfigParser::getConfigLore() << std::endl;
+            std::cout << "Help:" << std::endl
+            << "sound_processor [-h] [-c config.txt output.wav input1.wav [input2.wav …]]" << std::endl  << std::endl
+            << ConfigParser::getConfigFormat() << std::endl
+            << EditorFactory::getConfigCommands() << std::endl;
             return 0;
         }
         if(strcmp(argv[i], "-c") == 0) {
@@ -40,23 +41,19 @@ int main(int argc, char** argv) {
         return 1;
     }
     try {
-        ConfigParser parser(config, output, inputs);
-        SoundEdtiorFactory factory;
-        SoundCarry * active = new SoundCarry(parser.getInput());
-        std::string command;
-        while(!parser.parse_command(&command)) {
-            SoundEditor * editor = factory.create(command,parser.getInput());
-            editor->apply(command,&parser);
-            active->channel = editor->channel;
+        std::ifstream configFile(config);
+        ConfigParser parser(configFile, inputs);
+        EditorFactory factory;
+        SoundAction wavAction{"read", {} ,inputs};
+        WAVChannel* channel = nullptr;
+        while (wavAction.name != "end") {
+            channel = factory.getChannel(wavAction, channel);
+            wavAction = parser.nextAction();
         }
-        std::ofstream outFile(output, std::ios::binary);
-        if (!outFile.is_open())
-            throw std::exception();
-        active->write(outFile);
-        for(std::ifstream*& file : parser.files) {
-            delete file;
-        }
-        delete active;
+        WAVWriter* writer = factory.getWriter(channel, output);
+        writer->write();
+        writer->close();
+        delete writer;
     } catch (WAVException& e) {
         std::cerr << e.what();
         return e.getReturnCode();

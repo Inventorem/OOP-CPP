@@ -10,6 +10,12 @@ public:
 
     WAVChannel() = default;
 
+
+    /**
+     * @param buff  - buffer for read
+     * @param count - count of samples
+     * @return - count of read samples
+     * **/
     virtual unsigned int readSample(void* buff, unsigned int count) = 0;
 
     virtual void skip(unsigned int count) = 0;
@@ -28,7 +34,7 @@ public:
 
 };
 
-WAVChannel* getWAVReader(std::ifstream& out) noexcept(false);
+WAVChannel* getWAVReader(std::string& out) noexcept(false);
 
 class WAVWriter {
 public:
@@ -39,7 +45,7 @@ public:
 
 };
 
-WAVWriter* getWAVWriter(WAVChannel* channel, std::ofstream& out) noexcept(false);
+WAVWriter* getWAVWriter(WAVChannel* channel, std::string& out) noexcept(false);
 
 
 class WAVMute : public WAVChannel {};
