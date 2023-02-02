@@ -1,22 +1,6 @@
-# **Задача 1. Большое целое число BigInt**
+# **Task 1. Type BigInt**
 
-### **Общая информация**
-
-В этой задаче требуется реализовать большое целое число произвольной точности и набор операций над ним.
-
-### **Задача**
-
-1. Реализовать большое целое с заданным интерфейсом (см. раздел “Реализация”). Выбрать способ хранения и изменения
-   размера содержимого.
-1. Вместо malloc использовать new, вместо free использовать delete
-1. Методы строки можно посмотреть здесь: <https://en.cppreference.com/w/cpp/string/basic_string>
-1. Тщательно задокументировать публичные члены класса на языке, приближенном к техническому английскому.
-1. Написать юнит-тесты на все публичные методы класса с помощью любой специализированной библиотеки (рекомендуется
-   Google Test Framework[ ](http://code.google.com/p/googletest/)<http://code.google.com/p/googletest/>), либо без
-   оной (на усмотрение преподавателя). Убедиться в полноте покрытия кода тестами (каждая строчка кода должна исполняться
-   хотя бы одним тестом).
-
-### **Реализация**
+### **Realisation**
 
 class BigInt {
 
@@ -26,13 +10,13 @@ class BigInt {
 
 `  `BigInt(int);
 
-`  `BigInt(std::string); // бросать исключение std::invalid\_argument при ошибке
+`  `BigInt(std::string); // std::invalid\_argument for error
 
 `  `BigInt(const BigInt&);
 
 `  `~BigInt();
 
-`  `BigInt& operator=(const BigInt&); //возможно присваивание самому себе!
+`  `BigInt& operator=(const BigInt&); //can be used to itself
 
 `  `BigInt operator~() const;
 
@@ -101,14 +85,3 @@ BigInt operator&(const BigInt&, const BigInt&);
 BigInt operator|(const BigInt&, const BigInt&);
 
 std::ostream& operator<<(std::ostream& o, const BigInt& i);
-
-### **Повышенная сложность (по желанию):**
-
-1. Реализовать семантику перемещения
-
-BigInt(BigInt&&);
-
-BigInt& operator=(BigInt&&);
-
-1. Реализовать оператор ввода из потока с корректной обработкой ошибок std::istream& operator>>(std::istream& o, BigInt&
-   i);
