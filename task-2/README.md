@@ -14,7 +14,7 @@ Sound processor for wav-files in PCM, 2 bytes samples
 
 ## **Configuration file format:**
 
-#Comments
-#Start from new line
-mute 0 10\
-clip 0 20
+#Comments</br>
+#Start from new line</br>
+mute 0 10\</br>
+clip 0 20</br>
