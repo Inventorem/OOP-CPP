@@ -5,7 +5,7 @@ Sound processor for wav-files in PCM, 2 bytes samples
 ## **Effects:**
 `mute start end 	`
 
-`mix $n start 		//mix with give channel starting from start`
+`mix $n start 		//mix with given channel starting from start`
 
 `clip start end		//Clip by given points`
 ## **Input format:**
