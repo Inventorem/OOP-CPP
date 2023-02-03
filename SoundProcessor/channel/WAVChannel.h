@@ -60,3 +60,4 @@ WAVMixer* getMixerChannel(WAVChannel* first, WAVChannel* second, unsigned long t
 class WAVClip : public WAVChannel {};
 
 WAVClip* getClipChannel(WAVChannel* channel, unsigned long timeStart, unsigned long timeStop) noexcept(false);
+
